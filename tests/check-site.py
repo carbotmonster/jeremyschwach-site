@@ -66,13 +66,20 @@ for phrase in [
     assert phrase in sms_html,f'SMS page missing required text: {phrase}'
 sms_text=re.sub(r'\s+',' ',re.sub(r'<[^>]+>','',sms_html))
 for phrase in [
-    "This is Jeremy Schwach's personal assistant text program. Messages are sent by his AI assistant, Grokkie, from our text line.",
+    "Grokkie is the personal assistant line for Jeremy Schwach's household. Messages are family and personal logistics messages, including scheduling, appointment confirmations, reminders, and replies to your questions, sent by Grokkie from our text line.",
     'To opt in, text START to our text line. Texting START is the only way to opt in. No one is texted before they text START.',
     'The only way to opt in is to text START to our text line, as shown in the opt-in box at the top of this page.',
-    "By texting START, you agree to receive personal assistant text messages (scheduling, appointment confirmations, logistics, reminders, and replies to your questions) from Jeremy Schwach's assistant, Grokkie. Message frequency varies, usually a few messages per month. Standard message and data rates may apply. Reply STOP to opt out. Reply HELP for help. Consent is not a condition of purchase. We will not share mobile information with third parties for promotional or marketing purposes. Text messaging originator opt-in data and consent will not be shared with any third parties. This consent is for text messages only.",
+    "By texting START, you agree to receive family and personal logistics messages from Grokkie, the personal assistant line for Jeremy Schwach's household. Message frequency varies. Msg & data rates may apply. Reply STOP to opt out. Reply HELP for help. Consent is not a condition of purchase. We do not sell or share mobile numbers or opt-in data with third parties for marketing. We will not share mobile information with third parties for promotional or marketing purposes. Text messaging originator opt-in data and consent will not be shared with any third parties. This consent is for text messages only.",
+    "After you text START, the first message you receive is this confirmation: “Jeremy Schwach's assistant, Grokkie: You're set up to text with us. Message frequency varies. Message and data rates may apply. Reply HELP for help or email jeremy@schwachendeavors.com. Reply STOP to opt out. We will not share mobile information with third parties for promotional or marketing purposes.”",
     'Text messaging originator opt-in data and consent will not be shared with any third parties.',
+    'Msg & data rates may apply',
+    'We do not sell or share mobile numbers or opt-in data with third parties for marketing',
+    'Consent is not a condition of purchase',
 ]:
     assert phrase in sms_text,f'SMS page missing required CTA text: {phrase}'
+screenshot=root/'sms'/'opt-in-screenshot.png'
+assert screenshot.is_file() and screenshot.stat().st_size>0,'Missing /sms/opt-in-screenshot.png'
+assert b'608' not in screenshot.read_bytes(),'Screenshot file must not contain 608'
 for banned in ['608', '299-9876', 'verbal or written', 'verification codes']:
     assert banned not in sms_text,f'SMS page must not include: {banned}'
     assert banned not in sms_html,f'SMS page must not include: {banned}'
